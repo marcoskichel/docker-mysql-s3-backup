@@ -1,6 +1,7 @@
 #!/bin/sh
 cd /tmp
-file=$(date '+%Y-%m-%d %H:%M:%S').sql
+file=$(TZ='America/Sao_Paulo' date +%Y-%m-%d-%H:%M:%S).sql
+echo "Filename ${file}"
 mysqldump \
   --host ${MYSQL_HOST} \
   --port ${MYSQL_PORT} \
@@ -10,6 +11,7 @@ mysqldump \
 if [ "${?}" -eq 0 ]; then
   gzip ${file}
   aws s3 cp ${file}.gz s3://${S3_BUCKET}
+  rm ${file}
   rm ${file}.gz
 else
   echo "Error backing up mysql"
