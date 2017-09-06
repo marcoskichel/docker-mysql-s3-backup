@@ -11,7 +11,6 @@ mysqldump \
 if [ "${?}" -eq 0 ]; then
   gzip ${file}
   aws s3 cp ${file}.gz s3://${S3_BUCKET}
-  rm ${file}
   rm ${file}.gz
 else
   echo "Error backing up mysql"
